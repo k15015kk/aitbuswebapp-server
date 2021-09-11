@@ -1,4 +1,4 @@
-module github.com/k15015kk/aitbuswebapp
+module github.com/k15015kk/aitbuswebapp-server
 
 go 1.17
 
