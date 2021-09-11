@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+
+  postgres:
+    container_name: postgres
+    build:
+      context: .
+      dockerfile: ./docker/postgres/Dockerfile
+    environment:
+      - POSTGRES_USER=kyotonagoya
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=shuttlebus_gtfs
+    volumes: 
+      - database:/var/lib/postgresql/data
+
+  # app:
+  #   container_name: app
+  #   depends_on:
+  #     - postgres
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/golang/Dockerfile
+  #   ports:
+  #     - 8080:8080
+  #   environment:
+  #     - GOPATH=/go
+  #   volumes:
+  #     - ./go:/go/src/aitbuswebapp
+  #   command: go run main.go
+
+volumes: 
+  database:
+    driver: local
