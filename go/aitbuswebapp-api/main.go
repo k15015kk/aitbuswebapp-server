@@ -1,17 +1,19 @@
 package main
 
 import (
-	"aitbuswebapp-api/test"
+	"aitbuswebapp-api/middleware"
+	"aitbuswebapp-api/server"
 	"database/sql"
 	"fmt"
-	"log"
-	"net/http"
-
-	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
+	"log"
 )
 
 func main() {
+
+	// 現在時刻の取得
+	now := mwtime.NowTime()
+	fmt.Println(now)
 
 	// データベースの初期化
 	var Db *sql.DB
@@ -24,19 +26,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Print(Db)
-	fmt.Print("\n")
+	fmt.Println(Db)
 
-	test.TestPrint()
-
-	// Ginの定義
-	engine := gin.Default()
-
-	// ECHOでルートのGETアクセスしたときに返す
-	engine.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Hello world",
-		})
-	})
-	engine.Run(":8080")
+	// サーバを立ち上げる
+	if err := server.Init(); err != nil {
+		log.Fatal(err)
+	}
 }
