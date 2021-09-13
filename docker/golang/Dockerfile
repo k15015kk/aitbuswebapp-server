@@ -1,8 +1,7 @@
 FROM golang:latest
 
 WORKDIR /src/aitbuswebapp
-ADD ./go .
+ADD ./go/aitbuswebapp-api .
 
-RUN go mod init aitbuswebapp
-RUN go get github.com/lib/pq
-RUN go get github.com/gin-gonic/gin
+RUN go mod init aitbuswebapp-api
+RUN go mod tidy
