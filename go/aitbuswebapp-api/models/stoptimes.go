@@ -14,8 +14,6 @@ type StopTimes struct {
 	DropOffType   int
 }
 
-type StopTimesArray []*StopTimes
-
 func (st *StopTimes) FindByTripId(tripId string) (err error) {
 	db := database.GetDB()
 	return db.Where("trip_id = ?", tripId).First(st).Error
