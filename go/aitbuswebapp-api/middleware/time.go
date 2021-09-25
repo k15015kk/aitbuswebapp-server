@@ -4,6 +4,9 @@ import (
 	"time"
 )
 
+var nowTime time.Time
+
 func NowTime() time.Time {
-	return time.Now()
+	nowTime = time.Now()
+	return nowTime
 }
