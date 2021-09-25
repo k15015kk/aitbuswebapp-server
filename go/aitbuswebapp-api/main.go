@@ -22,25 +22,13 @@ func main() {
 
 	defer database.Close()
 
-	stoptimeTest := new(models.StopTimes)
-	calendarDates := new(models.CalendarDates)
-	stopTimeTestDbErr := stoptimeTest.FindByTripId("A1000")
+	testResult, err := models.FindByDepartureTime("8:30")
 
-	if stopTimeTestDbErr != nil {
-		log.Fatal(stopTimeTestDbErr)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	calendarDatesDbErr := calendarDates.FindByDate("20210401")
-
-	if calendarDatesDbErr != nil {
-		log.Fatal(calendarDatesDbErr)
-	}
-
-	fmt.Println("stoptime")
-	fmt.Printf("%#v\n", stoptimeTest)
-
-	fmt.Println("calendar")
-	fmt.Printf("%#v\n", calendarDates)
+	fmt.Printf("%#v\n", testResult[0])
 
 	// サーバを立ち上げる
 	if err := server.Init(); err != nil {

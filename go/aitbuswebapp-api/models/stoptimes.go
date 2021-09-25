@@ -2,19 +2,24 @@ package models
 
 import (
 	"aitbuswebapp-api/database"
+	"time"
 )
 
-type StopTimes struct {
+type StopTime struct {
 	TripId        string
-	ArrivalTime   string
-	DepartureTime string
+	ArrivalTime   time.Time
+	DepartureTime time.Time
 	StopId        string
 	StopSequence  int
 	PickupType    int
 	DropOffType   int
 }
 
-func (st *StopTimes) FindByTripId(tripId string) (err error) {
+func FindByDepartureTime(deaprtureTime string) ([]StopTime, error) {
+	var sts []StopTime
 	db := database.GetDB()
-	return db.Where("trip_id = ?", tripId).First(st).Error
+
+	err := db.Limit(3).Where("departure_time = ?", deaprtureTime).Find(&sts).Error
+
+	return sts, err
 }
