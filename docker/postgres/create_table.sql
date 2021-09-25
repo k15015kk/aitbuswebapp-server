@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS agency (
 
 CREATE TABLE IF NOT EXISTS calendar_dates (
     service_id VARCHAR(64) NOT NULL,
-    date VARCHAR(8),
+    date DATE,
     exception_type SMALLINT,
 
     PRIMARY KEY (service_id,date)
@@ -60,8 +60,8 @@ CREATE INDEX route__agency_id
 
 CREATE TABLE IF NOT EXISTS stop_times (
     trip_id VARCHAR(64) NOT NULL,
-    arrival_time VARCHAR(8) NOT NULL,
-    departure_time VARCHAR(8) NOT NULL,
+    arrival_time TIME NOT NULL,
+    departure_time TIME NOT NULL,
     stop_id  VARCHAR(64),
     stop_sequence INTEGER NOT NULL,
     pickup_type SMALLINT,
