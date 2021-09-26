@@ -15,11 +15,11 @@ type StopTime struct {
 	DropOffType   int
 }
 
-func FindByDepartureTime(deaprtureTime string) ([]StopTime, error) {
+func StoptimesFindByDepartureTime(deaprtureTime string, stop_sequence string) ([]StopTime, error) {
 	var sts []StopTime
 	db := database.GetDB()
 
-	err := db.Limit(3).Where("departure_time = ?", deaprtureTime).Find(&sts).Error
+	err := db.Limit(3).Where("departure_time >= ? AND stop_sequence = ?", deaprtureTime, stop_sequence).Find(&sts).Error
 
 	return sts, err
 }
