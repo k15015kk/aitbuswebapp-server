@@ -10,9 +10,28 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type ArrivalAndDepartureTime struct {
+	Arrival   string
+	Departure string
+}
+
 func GetTimeTableByDate(c *gin.Context) {
 	// 日付の取得
 	dateId := c.Query("date")
+
+	// 方向の指定
+	directionId := c.Query("direction")
+
+	// 方向が1と2でなければ，無効な方向IDとして返す
+	if directionId != "1" && directionId != "2" {
+		fmt.Println("error")
+		c.JSON(http.StatusBadRequest, gin.H{
+			"type":    "error",
+			"code":    "400",
+			"message": "directionID is not valid.",
+		})
+		return
+	}
 
 	var datetime time.Time
 
@@ -23,11 +42,10 @@ func GetTimeTableByDate(c *gin.Context) {
 		datetime = middleware.StringToTime(dateId)
 	}
 
-	fmt.Println(datetime)
-
 	// ダイヤグラムの検索
 	dia, diaErr := models.CalendarFindByDate(datetime)
 
+	// 運行していない場合は，運行していない日であると返す．
 	if diaErr != nil {
 		fmt.Println("error")
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -35,12 +53,19 @@ func GetTimeTableByDate(c *gin.Context) {
 			"code":    "400",
 			"message": "suspension",
 		})
-	} else {
-		fmt.Println(dia)
-		// 時刻表を取得
-		c.JSON(http.StatusOK, gin.H{
-			"dia": dia.ServiceId,
-		})
+		return
 	}
+
+	nowTime := middleware.NowTime()
+	nowTimeString := nowTime.Format("2006-01-02T15:04:05+09:00")
+	targetDate := datetime.Format("2006-01-02")
+
+	// 時刻表を返す
+	c.JSON(http.StatusOK, gin.H{
+		"nowDateTime": nowTimeString,
+		"targateDate": targetDate,
+		"diagram":     dia.ServiceId,
+		"directionId": directionId,
+	})
 
 }
