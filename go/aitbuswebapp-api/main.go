@@ -2,8 +2,6 @@ package main
 
 import (
 	"aitbuswebapp-api/database"
-	"aitbuswebapp-api/middleware"
-	"aitbuswebapp-api/models"
 	"aitbuswebapp-api/server"
 	"fmt"
 	"log"
@@ -12,10 +10,6 @@ import (
 )
 
 func main() {
-	// 現在時刻の取得
-	now := middleware.NowTime()
-	nowString := middleware.TimeToString(now)
-	fmt.Println(nowString)
 
 	// データベースの初期化
 	database.Init()
@@ -23,15 +17,15 @@ func main() {
 
 	defer database.Close()
 
-	testResult, err := models.StoptimesFindByDepartureTime(nowString, "0")
+	// testResult, err := models.StoptimesFindByDepartureTime(nowString, "0")
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	for _, v := range testResult {
-		fmt.Printf("%#v\n", v.TripId)
-	}
+	// for _, v := range testResult {
+	// 	fmt.Printf("%#v\n", v.TripId)
+	// }
 
 	// サーバを立ち上げる
 	if err := server.Init(); err != nil {

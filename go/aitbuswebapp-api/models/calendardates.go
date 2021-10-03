@@ -2,15 +2,19 @@ package models
 
 import (
 	"aitbuswebapp-api/database"
+	"time"
 )
 
 type CalendarDates struct {
 	ServiceId     string
-	Date          int
+	Date          time.Time
 	ExceptionType int
 }
 
-func (cd *CalendarDates) FindByDate(date string) (err error) {
+func CalendarFindByDate(date time.Time) (CalendarDates, error) {
+	var cd CalendarDates
 	db := database.GetDB()
-	return db.Where("date = ?", date).First(cd).Error
+	err := db.Where("date = ?", date.Format("2006-01-02")).First(&cd).Error
+
+	return cd, err
 }
