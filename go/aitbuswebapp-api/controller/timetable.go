@@ -30,7 +30,11 @@ func GetTimeTableByDate(c *gin.Context) {
 
 	if diaErr != nil {
 		fmt.Println("error")
-		c.AbortWithStatus(400)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"type":    "error",
+			"code":    "400",
+			"message": "suspension",
+		})
 	} else {
 		fmt.Println(dia)
 		// 時刻表を取得
