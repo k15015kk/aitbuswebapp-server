@@ -15,6 +15,14 @@ type ArrivalAndDepartureTime struct {
 	Departure string
 }
 
+func BadRequest(c *gin.Context, message string) {
+	c.JSON(http.StatusBadRequest, gin.H{
+		"type":    "error",
+		"code":    "400",
+		"message": message,
+	})
+}
+
 func GetTimeTableByDate(c *gin.Context) {
 	// 日付の取得
 	dateId := c.Query("date")
@@ -25,11 +33,7 @@ func GetTimeTableByDate(c *gin.Context) {
 	// 方向が1と2でなければ，無効な方向IDとして返す
 	if directionId != "1" && directionId != "2" {
 		fmt.Println("error")
-		c.JSON(http.StatusBadRequest, gin.H{
-			"type":    "error",
-			"code":    "400",
-			"message": "directionID is not valid.",
-		})
+		BadRequest(c, "DirectionID is not valid.")
 		return
 	}
 
@@ -48,11 +52,7 @@ func GetTimeTableByDate(c *gin.Context) {
 	// 運行していない場合は，運行していない日であると返す．
 	if diaErr != nil {
 		fmt.Println("error")
-		c.JSON(http.StatusBadRequest, gin.H{
-			"type":    "error",
-			"code":    "400",
-			"message": "suspension",
-		})
+		BadRequest(c, "No service today.")
 		return
 	}
 
