@@ -31,7 +31,7 @@ func GetTimeTableByDate(c *gin.Context) {
 	direction := c.Query("direction")
 
 	// 方向が1と2でなければ，無効な方向IDとして返す
-	if direction != "1" && direction != "2" {
+	if direction != "0" && direction != "1" {
 		fmt.Println("error")
 		BadRequest(c, "DirectionID is not valid.")
 		return
@@ -72,12 +72,18 @@ func GetTimeTableByDate(c *gin.Context) {
 
 	fmt.Printf("%#v\n", trips)
 
+	// 時刻表を取得する
+	stoptimes, tripErr := models.FindStoptimesByTripIds(trips, "0")
+
+	fmt.Printf("%#v\n", stoptimes)
+
 	// 時刻表を返す
 	c.JSON(http.StatusOK, gin.H{
 		"nowDateTime": nowTimeString,
 		"targateDate": targetDate,
 		"diagram":     dia.ServiceId,
 		"directionId": direction,
+		"schedule":    stoptimes,
 	})
 
 }
