@@ -21,6 +21,7 @@ func Router() (*gin.Engine, error) {
 	})
 
 	api.GET("/timetable", controller.GetTimeTableByDate)
+	api.GET("/timetable/:diagram", controller.GetTimeTableByDiagram)
 
 	return engine, nil
 }
