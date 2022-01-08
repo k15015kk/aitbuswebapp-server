@@ -15,14 +15,6 @@ type ArrivalAndDepartureTime struct {
 	Departure string
 }
 
-func BadRequest(c *gin.Context, message string) {
-	c.JSON(http.StatusBadRequest, gin.H{
-		"type":    "error",
-		"code":    "400",
-		"message": message,
-	})
-}
-
 func GetTimeTableByDate(c *gin.Context) {
 	// 日付の取得
 	date := c.Query("date")
@@ -114,7 +106,7 @@ func GetTimeTableByDiagram(c *gin.Context) {
 	// エラーが起きた場合は，その旨を返す．
 	if tripErr != nil {
 		fmt.Println("error")
-		BadRequest(c, "Could not get trip.")
+		BadRequest(c, "Could not fetch trip.")
 		return
 	}
 

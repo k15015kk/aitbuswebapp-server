@@ -3,6 +3,7 @@ package controller
 import (
 	"aitbuswebapp-api/models"
 	"fmt"
+	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -14,17 +15,36 @@ func GetCalendar(c *gin.Context) {
 	monthQuery := c.Param("month")
 
 	year, err := strconv.Atoi(yearQuery)
-	month, err := strconv.Atoi(monthQuery)
 
-	data, err := models.FindDiagramByDate(year, month)
-
-	// エラーが起きた場合は，その旨を返す．
 	if err != nil {
-		fmt.Printf("%#v\n", err)
 		fmt.Println("error")
+		BadRequest(c, "Please confirm Year.")
 		return
 	}
 
-	fmt.Printf("%#v\n", data)
+	month, err := strconv.Atoi(monthQuery)
 
+	if err != nil {
+		fmt.Println("error")
+		BadRequest(c, "Please confirm Month.")
+		return
+	}
+
+	calendar, calendarErr := models.FindDiagramByDate(year, month)
+
+	// エラーが起きた場合は，その旨を返す．
+	if calendarErr != nil {
+		fmt.Println("error")
+		BadRequest(c, "Could not fetch calendar.")
+		return
+	}
+
+	fmt.Printf("%#v\n", calendar)
+
+	// スケジュールを返す
+	c.JSON(http.StatusOK, gin.H{
+		"year":     year,
+		"month":    month,
+		"calendar": calendar,
+	})
 }
