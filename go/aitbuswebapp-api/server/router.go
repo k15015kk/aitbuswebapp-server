@@ -3,13 +3,40 @@ package server
 import (
 	"aitbuswebapp-api/controller"
 	"net/http"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func Router() (*gin.Engine, error) {
 	// Ginの定義
 	engine := gin.Default()
+
+	engine.Use(cors.New(cors.Config{
+		// 許可したいHTTPメソッドの一覧
+		AllowMethods: []string{
+			"POST",
+			"GET",
+			"OPTIONS",
+			"PUT",
+			"DELETE",
+		},
+		// 許可したいHTTPリクエストヘッダの一覧
+		AllowHeaders: []string{
+			"Access-Control-Allow-Headers",
+			"Content-Type",
+			"Content-Length",
+			"Accept-Encoding",
+			"X-CSRF-Token",
+			"Authorization",
+		},
+		// 許可したいアクセス元の一覧
+		AllowOrigins: []string{
+			"http://localhost:3000",
+		},
+		MaxAge: 24 * time.Hour,
+	}))
 
 	api := engine.Group("api/v1")
 
