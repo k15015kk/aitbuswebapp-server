@@ -67,5 +67,5 @@ func FindDiagramByDate(year int, month int) ([]map[string]string, error) {
 		calendar = append(calendar, calendarMap)
 	}
 
-	return calendar, nil
+	return []map[string]string{}, nil
 }

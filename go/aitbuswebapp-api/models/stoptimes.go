@@ -53,5 +53,5 @@ func FindStoptimesByTripIds(trips []string, sequence string) ([]map[string]strin
 		departureTimes = append(departureTimes, scheduleMap)
 	}
 
-	return departureTimes, nil
+	return []map[string]string{}, nil
 }
