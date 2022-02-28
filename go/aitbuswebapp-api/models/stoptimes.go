@@ -32,7 +32,7 @@ func FindStoptimesByTripIds(trips []string, sequence string) ([]map[string]strin
 
 	if fetchErr != nil {
 		fmt.Println("error")
-		fmt.Println("SQL Scan has failed")
+		fmt.Println("SQL Fetch has failed")
 		return departureTimes, fetchErr
 	}
 

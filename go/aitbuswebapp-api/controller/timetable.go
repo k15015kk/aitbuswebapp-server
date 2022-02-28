@@ -38,19 +38,26 @@ func GetTimeTableByDate(c *gin.Context) {
 		datetime = middleware.StringToTime(date)
 	}
 
+	// 別で現在時刻を定義
+	nowTime := middleware.NowTime()
+	nowTimeString := nowTime.Format("2006-01-02T15:04:05+09:00")
+	targetDate := datetime.Format("2006-01-02")
+
 	// ダイヤグラムの検索
 	dia, diaErr := models.FindCalendarByDate(datetime)
 
 	// 運行していない場合は，運行していない日であると返す．
 	if diaErr != nil {
-		fmt.Println("error")
-		BadRequest(c, "No service today.")
+		// 時刻表を返す
+		c.JSON(http.StatusOK, gin.H{
+			"nowDateTime": nowTimeString,
+			"targateDate": targetDate,
+			"diagram":     "Not in Service",
+			"directionId": direction,
+			"schedule":    []models.StopTime{},
+		})
 		return
 	}
-
-	nowTime := middleware.NowTime()
-	nowTimeString := nowTime.Format("2006-01-02T15:04:05+09:00")
-	targetDate := datetime.Format("2006-01-02")
 
 	// その日のダイヤの特定方向のtripsを取得する
 	trips, tripErr := models.FindTripIdByServiceAndDirection(dia.ServiceId, direction)
